@@ -1,0 +1,5 @@
+package com.doc.model.enums;
+
+public enum OrderStatus {
+    CONFIRMED, UNDER_PROGRESS, PACKED, DISPATCHED, ARRIVING_TODAY, ARRIVING_EARLY, CANCELLED, OUT_FOR_DELIVERY
+}
