@@ -1,5 +1,6 @@
 package com.doc.exception;
 
+import com.doc.constants.ServiceConstants;
 import com.doc.responseutils.Error;
 import com.doc.responseutils.Response;
 import com.doc.responseutils.ResponseHandler;
@@ -22,13 +23,13 @@ public class DocumentExceptionHandler {
         String transactionId = cartNotFoundException.getTransactionId();
 
         Map<String, String> map = new HashMap<>();
-        map.put(StringUtils.isEmpty(orderId) ? "Transaction Id is not available" : "Transaction Id is available", transactionId);
-        map.put(cartNotFoundException.isOrderIdExists() ? "Medicine Details not found for this orderId" : "Order Id is not found", orderId);
+        map.put(StringUtils.isEmpty(orderId) ? ServiceConstants.TRANSACTION_ID_NOT_AVAILABLE : ServiceConstants.TRANSACTION_ID_AVAILABLE, transactionId);
+        map.put(cartNotFoundException.isOrderIdExists() ? ServiceConstants.MEDICINE_DETAILS_NOT_FOUND : ServiceConstants.ORDER_ID_NOT_FOUND, orderId);
 
         Error error = new Error();
         error.setErrors(Collections.singletonList(map));
         error.setHttpStatus(HttpStatus.NOT_FOUND);
-        error.setResult("Failed");
+        error.setResult(ExceptionUtility.writeExceptionAsString(cartNotFoundException));
 
         return ResponseHandler.failure(null, List.of(error));
     }

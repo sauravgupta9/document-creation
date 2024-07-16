@@ -2,16 +2,19 @@ package com.doc.exception;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.StringWriter;
+
 public class ExceptionUtility {
 
     private ExceptionUtility() {
     }
 
-    public static String cartErrorMessage(boolean status) {
-        return status ? "Medicine Details not found for this orderId" : "Order Id is not found";
-    }
-
-    public static String invoiceErrorMessage(String orderId) {
-        return StringUtils.isEmpty(orderId) ? "Transaction Id is not available" : "Transaction Id is available";
+    public static String writeExceptionAsString(Exception e){
+        StringWriter stringWriter = new StringWriter();
+        StackTraceElement[] stackTrace = e.getStackTrace();
+        for(StackTraceElement element: stackTrace){
+            stringWriter.write(element.toString());
+        }
+        return stringWriter.toString();
     }
 }

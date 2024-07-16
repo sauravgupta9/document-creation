@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static java.util.Objects.nonNull;
 import static java.util.Objects.isNull;
 
 @Service
@@ -25,11 +24,13 @@ public class InvoiceGenerationServiceImpl implements InvoiceGenerationService {
     private CartRepository cartRepository;
 
     @Override
-    public String getInvoiceAsString(String transactionId) {
+    public String getInvoiceAsString(String transactionId) throws CartNotFoundException {
         try {
             Invoice invoice = getInvoiceDetails(transactionId);
             Cart cart = getCartDetails(transactionId, invoice.getOrderId());
 
+        } catch (CartNotFoundException e) {
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,7 +39,7 @@ public class InvoiceGenerationServiceImpl implements InvoiceGenerationService {
 
     private Invoice getInvoiceDetails(String transactionId) throws CartNotFoundException {
         Invoice invoice = invoiceRepository.findByTransactionId(transactionId);
-        if(isNull(invoice))
+        if (isNull(invoice))
             throw new CartNotFoundException(transactionId, null);
         return invoice;
     }
